@@ -26,7 +26,7 @@ WORKDIR /app
 
 # Install application
 COPY ./reposcan ./reposcan
-COPY ./poetry.lock ./pyproject.toml ./scan.py /app/
+COPY ./uv.lock ./pyproject.toml ./scan.py /app/
 RUN uv sync --no-cache-dir
 
 # Create the custom script that the action will execute
