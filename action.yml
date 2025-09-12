@@ -1,0 +1,25 @@
+name: 'Repo Scan Action'
+description: 'Scans repositories for vulnerabilities using custom script'
+author: 'fm-labs'
+
+inputs:
+  path:
+    description: 'A path within the source code repo'
+    required: false
+    default: '.'
+
+outputs:
+  scan-output:
+    description: 'Output from the repo scan script'
+  exit-code:
+    description: 'Exit code from the scan script'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.path }}
+
+branding:
+  icon: 'shield'
+  color: 'blue'

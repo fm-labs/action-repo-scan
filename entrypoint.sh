@@ -1,0 +1,54 @@
+#!/bin/bash
+
+set -e
+
+# Get the path argument passed from the action
+PATH_ARG="${1:-.}"
+
+echo "Repo Scan Action - Entrypoint"
+echo "Path argument: $PATH_ARG"
+echo ""
+
+# Create a temporary file to capture the script output
+OUTPUT_FILE=$(mktemp)
+
+# Execute the custom script and capture both stdout and stderr
+echo "Executing custom scan script..."
+set +e  # Temporarily disable exit on error to capture exit code
+/usr/local/bin/script.sh "$PATH_ARG" 2>&1 | tee "$OUTPUT_FILE"
+SCRIPT_EXIT_CODE=$?
+set -e  # Re-enable exit on error
+
+echo ""
+echo "Script execution completed with exit code: $SCRIPT_EXIT_CODE"
+
+# Read the captured output
+SCAN_OUTPUT=$(cat "$OUTPUT_FILE")
+
+# Set GitHub Action outputs
+# The output needs to be properly escaped for multiline content
+if [ -n "$GITHUB_OUTPUT" ]; then
+  {
+    echo "scan-output<<EOF"
+    cat "$OUTPUT_FILE"
+    echo "EOF"
+  } >> "$GITHUB_OUTPUT"
+
+  echo "exit-code=$SCRIPT_EXIT_CODE" >> "$GITHUB_OUTPUT"
+  
+  echo ""
+  echo "GitHub Action outputs have been set:"
+  echo "- scan-output: Contains the full scan output"
+  echo "- exit-code: $SCRIPT_EXIT_CODE"
+else
+  echo ""
+  echo "GitHub Action outputs (would be set if GITHUB_OUTPUT was available):"
+  echo "- scan-output: Contains the full scan output"
+  echo "- exit-code: $SCRIPT_EXIT_CODE"
+fi
+
+# Clean up temporary file
+rm -f "$OUTPUT_FILE"
+
+# Exit with the same code as the script
+exit $SCRIPT_EXIT_CODE
