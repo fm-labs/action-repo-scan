@@ -16,11 +16,16 @@ if [[ "${INPUT_DEBUG:-false}" == "true" ]]; then
 fi
 
 # get github action inputs from env variables
-INPUT_PATH="${INPUT_PATH:-${GITHUB_WORKSPACE}}"
+SCAN_PATH=$GITHUB_WORKSPACE
+if [[ -n "$INPUT_PATH" && "$INPUT_PATH" != "." ]]; then
+  SCAN_PATH="$GITHUB_WORKSPACE/$INPUT_PATH"
+fi
 
 echo "Repo Scan Action - Entrypoint"
 echo "Input: path: $INPUT_PATH"
 echo "Input: debug: $INPUT_DEBUG"
+echo ""
+echo "Scan path: $SCAN_PATH"
 echo ""
 
 # Create a temporary file to capture the script output
@@ -29,9 +34,9 @@ OUTPUT_FILE=$(mktemp)
 # Execute the custom script and capture both stdout and stderr
 echo "Executing custom scan script..."
 set +e  # Temporarily disable exit on error to capture exit code
-#/usr/local/bin/script.sh "$INPUT_PATH" 2>&1 | tee "$OUTPUT_FILE"
+#/usr/local/bin/script.sh "$SCAN_PATH" 2>&1 | tee "$OUTPUT_FILE"
 cd /app || exit 1
-uv run ./scan.py "$INPUT_PATH" 2>&1 | tee "$OUTPUT_FILE"
+uv run ./scan.py "$SCAN_PATH" 2>&1 | tee "$OUTPUT_FILE"
 SCRIPT_EXIT_CODE=$?
 set -e  # Re-enable exit on error
 
