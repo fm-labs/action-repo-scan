@@ -4,9 +4,13 @@ author: 'fm-labs'
 
 inputs:
   path:
-    description: 'A path within the source code repo'
+    description: 'A path within the source code repo.'
     required: false
-    default: '.'
+    default: ''
+  debug:
+    description: 'Enable debug mode'
+    required: false
+    default: 'false'
 
 outputs:
   scan-output:

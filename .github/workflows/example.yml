@@ -18,7 +18,7 @@ jobs:
       id: repo-scan
       uses: ./
       with:
-        path: '.'
+        debug: 'true'
         
     - name: Display scan results
       run: |
