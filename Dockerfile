@@ -9,14 +9,17 @@ RUN apk add --no-cache \
     && rm -rf /var/cache/apk/*
 
 
+# Install astral uv
+RUN pip install --no-cache-dir --upgrade uv pip
+
 # Install trivy
 #RUN curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.66.0
 RUN curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /opt/trivy -d v0.66.0
 RUN ln -s /opt/trivy/trivy /usr/local/bin/trivy
 
-## Create a non-root user
-#RUN addgroup -S appuser &&  \
-#    adduser -S appuser -G appuser
+# Create a non-root user
+RUN addgroup -S appuser &&  \
+    adduser -S appuser -G appuser
 
 # Set the working directory
 WORKDIR /app
@@ -31,7 +34,4 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-# Environment variables
-#ENV PYTHONUNBUFFERED=1
-#ENV PYTHONPATH=/app
-#USER appuser
+USER appuser
