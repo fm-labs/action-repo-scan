@@ -10,12 +10,15 @@ print_debug_env() {
   echo "==========================================="
 }
 
-# Check input (GitHub normalizes booleans to lowercase strings "true"/"false")
+# Check input
+# INPUT_PATH: Sub-path to scan (default: None, meaning root of the repo)
+# INPUT_DEBUG: Enable debug output (true/false, default: false)
+
 if [[ "${INPUT_DEBUG:-false}" == "true" ]]; then
   print_debug_env
 fi
 
-# get github action inputs from env variables
+# Determine the scan path
 SCAN_PATH=$GITHUB_WORKSPACE
 if [[ -n "$INPUT_PATH" && "$INPUT_PATH" != "." ]]; then
   SCAN_PATH="$GITHUB_WORKSPACE/$INPUT_PATH"
