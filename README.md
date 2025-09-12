@@ -1,10 +1,10 @@
 # Repo Scan Action
 
-A GitHub Action that scans repositories for vulnerabilities using a custom script.
+A GitHub Action that scans repositories for vulnerabilities.
 
 ## Description
 
-This action executes a custom scanning script located at `/usr/local/bin/script.sh` within the repo image and captures its outputs. The script analyzes files in a specified path and provides vulnerability scan results.
+The script analyzes files in a specified path and provides vulnerability scan results.
 
 ## Usage
 
@@ -20,7 +20,7 @@ jobs:
     
     - name: Run Repo Scan
       id: scan
-      uses: fm-labs/repo-scan-action@v1
+      uses: fm-labs/action-repo-scan@v1
       with:
         path: '.'  # Optional: defaults to '.'
         
@@ -46,19 +46,11 @@ jobs:
 
 ## Features
 
-- Executes custom scanning binary at `/usr/local/bin/script.sh`
-- Passes the specified path as an argument to the script
-- Captures both stdout and stderr from the script execution
-- Provides structured outputs for use in subsequent workflow steps
-- Handles script exit codes appropriately
+- Scans for vulnerabilities
+- Scans for misconfigurations
+- Scans for secret leaks
+- Scans for license compliance issues
 
-## Example Scan Output
-
-The scan output typically includes:
-- Files analyzed count
-- Vulnerability severity breakdown
-- Scan completion status
-- Total files scanned
 
 ## License
 
