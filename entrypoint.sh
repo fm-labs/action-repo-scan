@@ -16,7 +16,8 @@ OUTPUT_FILE=$(mktemp)
 echo "Executing custom scan script..."
 set +e  # Temporarily disable exit on error to capture exit code
 #/usr/local/bin/script.sh "$PATH_ARG" 2>&1 | tee "$OUTPUT_FILE"
-uv run scan.py "$PATH_ARG" 2>&1 | tee "$OUTPUT_FILE"
+cd /app || exit 1
+uv run ./scan.py "$PATH_ARG" 2>&1 | tee "$OUTPUT_FILE"
 SCRIPT_EXIT_CODE=$?
 set -e  # Re-enable exit on error
 
