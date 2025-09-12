@@ -24,10 +24,15 @@ RUN addgroup -S appuser &&  \
 # Set the working directory
 WORKDIR /app
 
+# Install application
+COPY ./reposcan ./reposcan
+COPY ./poetry.lock ./pyproject.toml ./scan.py /app/
+RUN uv sync --no-cache-dir
+
 # Create the custom script that the action will execute
-RUN mkdir -p /usr/local/bin
-COPY script.sh /usr/local/bin/script.sh
-RUN chmod +x /usr/local/bin/script.sh
+#RUN mkdir -p /usr/local/bin
+#COPY script.sh /usr/local/bin/script.sh
+#RUN chmod +x /usr/local/bin/script.sh
 
 # Copy the entrypoint script
 COPY entrypoint.sh /entrypoint.sh

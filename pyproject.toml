@@ -1,0 +1,7 @@
+[project]
+name = "action-repo-scan"
+version = "0.1.0"
+description = "GitHub Action to scan a repository for sensitive information."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
