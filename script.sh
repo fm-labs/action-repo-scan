@@ -20,8 +20,8 @@ then
     echo "trivy could not be found, please install it to perform actual scans."
     echo "Continuing with simulated scan results..."
 else
-    echo "Running trivy scan..."
-    trivy repo --scanner vuln "$PATH_TO_SCAN" -f text || true
+    echo "Running trivy vuln scan..."
+    trivy repo --scanners vuln "$PATH_TO_SCAN" -f table || true
     # Capture the exit code of trivy
     TRIVY_EXIT_CODE=$?
     if [ $TRIVY_EXIT_CODE -ne 0 ] && [ $TRIVY_EXIT_CODE -ne 1 ]; then
