@@ -13,8 +13,7 @@ RUN apk add --no-cache \
 RUN pip install --no-cache-dir --upgrade uv pip
 
 # Install trivy
-#RUN curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.66.0
-RUN curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /opt/trivy -d v0.66.0
+RUN curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /opt/trivy -d v0.69.3
 RUN ln -s /opt/trivy/trivy /usr/local/bin/trivy
 
 # Create a non-root user
