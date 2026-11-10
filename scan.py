@@ -1,6 +1,6 @@
-import sys
 import json
-from tempfile import mktemp
+import sys
+from tempfile import NamedTemporaryFile
 
 from reposcan.trivy_helper import run_trivy_repo_scan
 
@@ -33,8 +33,11 @@ if __name__ == "__main__":
         print("Path argument is required")
         sys.exit(1)
 
-    # get temp dir
-    tmp_out_file = mktemp()
+    if len(sys.argv) > 2:
+        tmp_out_file = sys.argv[2]
+    else:
+        tmpf = NamedTemporaryFile(delete=False)
+        tmp_out_file = tmpf.name
 
     print(f"Scanning path '{arg_path}' ...")
     print(f"Output file is '{tmp_out_file}'")

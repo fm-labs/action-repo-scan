@@ -1,22 +1,22 @@
 #!/bin/bash
 set -euo pipefail
 
-print_debug_env() {
-  echo "=== Environment variables ==="
-  env | sort
-  echo
-  echo "=== GitHub-provided variables (GITHUB_*) ==="
-  env | sort | grep '^GITHUB_' || echo "No GITHUB_* variables found."
-  echo "==========================================="
-}
+#print_debug_env() {
+#  echo "=== Environment variables ==="
+#  env | sort
+#  echo
+#  echo "=== GitHub-provided variables (GITHUB_*) ==="
+#  env | sort | grep '^GITHUB_' || echo "No GITHUB_* variables found."
+#  echo "==========================================="
+#}
 
 # Check input
 # INPUT_PATH: Sub-path to scan (default: None, meaning root of the repo)
 # INPUT_DEBUG: Enable debug output (true/false, default: false)
 
-if [[ "${INPUT_DEBUG:-false}" == "true" ]]; then
-  print_debug_env
-fi
+#if [[ "${INPUT_DEBUG:-false}" == "true" ]]; then
+#  print_debug_env
+#fi
 
 # Determine the scan path
 SCAN_PATH=$GITHUB_WORKSPACE
@@ -26,7 +26,7 @@ fi
 
 echo "Repo Scan Action - Entrypoint"
 echo "Input: path: $INPUT_PATH"
-echo "Input: debug: $INPUT_DEBUG"
+#echo "Input: debug: $INPUT_DEBUG"
 echo ""
 echo "Scan path: $SCAN_PATH"
 echo ""
@@ -39,7 +39,7 @@ echo "Executing custom scan script..."
 set +e  # Temporarily disable exit on error to capture exit code
 #/usr/local/bin/script.sh "$SCAN_PATH" 2>&1 | tee "$OUTPUT_FILE"
 cd /app || exit 1
-uv run ./scan.py "$SCAN_PATH" 2>&1 | tee "$OUTPUT_FILE"
+uv run ./scan.py "$SCAN_PATH" "$OUTPUT_FILE" 2>&1
 SCRIPT_EXIT_CODE=$?
 set -e  # Re-enable exit on error
 
