@@ -6,17 +6,19 @@ inputs:
   path:
     description: 'A path within the source code repo.'
     required: false
-    default: ''
+    default: '.'
   debug:
     description: 'Enable debug mode'
     required: false
     default: 'false'
 
 outputs:
+  scan-file:
+    description: Path (relative to workspace) of the JSON scan result
   scan-output:
-    description: 'Output from the repo scan script'
+    description: Raw scan output
   exit-code:
-    description: 'Exit code from the scan script'
+    description: Exit code of the scan
 
 runs:
   using: 'docker'

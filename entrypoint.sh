@@ -31,8 +31,10 @@ echo ""
 echo "Scan path: $SCAN_PATH"
 echo ""
 
-# Create a temporary file to capture the script output
-OUTPUT_FILE=$(mktemp)
+# Write the result somewhere the runner can see it (bind-mounted from the host)
+RESULT_DIR="$GITHUB_WORKSPACE/.repo-scan"
+mkdir -p "$RESULT_DIR"
+OUTPUT_FILE="$RESULT_DIR/scan-result.json"
 
 # Execute the custom script and capture both stdout and stderr
 echo "Executing custom scan script..."
@@ -48,35 +50,38 @@ echo "Script execution completed with exit code: $SCRIPT_EXIT_CODE"
 
 # Read the captured output
 SCAN_OUTPUT=$(cat "$OUTPUT_FILE")
-
 echo "-- SCAN OUTPUT START --"
-echo $SCAN_OUTPUT
+cat "$OUTPUT_FILE"
 echo "-- SCAN OUTPUT END --"
 
 # Set GitHub Action outputs
 # The output needs to be properly escaped for multiline content
 if [ -n "$GITHUB_OUTPUT" ]; then
-  {
-    echo "scan-output<<EOF"
-    cat "$OUTPUT_FILE"
-    echo "EOF"
-  } >> "$GITHUB_OUTPUT"
+  #{
+  #  echo "scan-output<<EOF"
+  #  cat "$OUTPUT_FILE"
+  #  echo "EOF"
+  #} >> "$GITHUB_OUTPUT"
 
+  # Path as seen from the runner: /github/workspace inside == ${{ github.workspace }} outside,
+  # so return a workspace-relative path
+  echo "scan-file=.repo-scan/scan-result.json" >> "$GITHUB_OUTPUT"
   echo "exit-code=$SCRIPT_EXIT_CODE" >> "$GITHUB_OUTPUT"
+
+  # keep the inline output too, with a unique delimiter
+  DELIM="EOF_$(openssl rand -hex 8 2>/dev/null || date +%s%N)"
+  { echo "scan-output<<$DELIM"; cat "$OUTPUT_FILE"; echo "$DELIM"; } >> "$GITHUB_OUTPUT"
+
   
   echo ""
   echo "GitHub Action outputs have been set:"
   echo "- scan-output: Contains the full scan output"
-  echo "- exit-code: $SCRIPT_EXIT_CODE"
-else
-  echo ""
-  echo "GitHub Action outputs (would be set if GITHUB_OUTPUT was available):"
-  echo "- scan-output: Contains the full scan output"
+  echo "- scan-file": Path to scan result json file
   echo "- exit-code: $SCRIPT_EXIT_CODE"
 fi
 
-# Clean up temporary file
-rm -f "$OUTPUT_FILE"
+## Clean up temporary file
+#rm -f "$OUTPUT_FILE"
 
 # Exit with the same code as the script
 exit $SCRIPT_EXIT_CODE
