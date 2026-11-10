@@ -49,6 +49,10 @@ echo "Script execution completed with exit code: $SCRIPT_EXIT_CODE"
 # Read the captured output
 SCAN_OUTPUT=$(cat "$OUTPUT_FILE")
 
+echo "-- SCAN OUTPUT START --"
+echo $SCAN_OUTPUT
+echo "-- SCAN OUTPUT END --"
+
 # Set GitHub Action outputs
 # The output needs to be properly escaped for multiline content
 if [ -n "$GITHUB_OUTPUT" ]; then
