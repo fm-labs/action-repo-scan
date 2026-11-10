@@ -1,4 +1,4 @@
-FROM python:3.13-alpine3.22
+FROM python:3.14-alpine3.24
 
 ARG TARGETARCH
 
@@ -13,7 +13,7 @@ RUN apk add --no-cache \
 RUN pip install --no-cache-dir --upgrade uv pip
 
 # Install trivy
-RUN curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /opt/trivy -d v0.69.3
+RUN curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /opt/trivy -d v0.76.2
 RUN ln -s /opt/trivy/trivy /usr/local/bin/trivy
 
 # Create a non-root user
